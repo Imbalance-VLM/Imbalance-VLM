@@ -41,7 +41,7 @@ class Supervised(AlgorithmBase):
         return model
     
     def set_ema_model(self):
-        ema_model = super().set_ema_model()
+        ema_model = self.net_builder(num_classes=self.num_classes,decoder_depth=self.args.decoder_depth, decoder_mlp_ratio=self.args.decoder_mlp_ratio, decoder_num_heads=self.args.decoder_num_heads) 
         if self.args.extra_fc == 'marc':
             ema_model = MARC_Net(self.args, ema_model, self.args.num_classes)
         if self.args.extra_fc == 'crt':
@@ -93,11 +93,11 @@ class Supervised(AlgorithmBase):
     def train(self):
         # lb: labeled, ulb: unlabeled
         for name, para in self.model.named_parameters():
-            if 'module.extra_mlp' in name or 'module.classifier' in name:
-            #if 'module.vision_model.encoder.layers.23' in name or 'module.vision_model.post_layernorm' in name or 'module.visual_projection' in name or 'module.classifier' in name:
-                para.requires_grad = True
-            else:
+            #if 'module.extra_mlp' in name or 'module.classifier' in name:
+            if 'vision_model' in name:
                 para.requires_grad = False
+            else:
+                para.requires_grad = True
             print(name, para.requires_grad)
         self.print_fn(f'Number of Trainable Params after freeze some parameters: {count_parameters(self.model)}')
         self.model.train()

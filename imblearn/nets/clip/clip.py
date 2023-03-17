@@ -10,29 +10,23 @@ from typing import Any, Optional, Tuple, Union
 
 from transformers import CLIPPreTrainedModel, CLIPVisionConfig
 from transformers.models.clip.modeling_clip import CLIPVisionTransformer
+from timm.models.vision_transformer import Block
 
 class CLIPVisionModelWithProjection(CLIPPreTrainedModel):
     config_class = CLIPVisionConfig
-    def __init__(self, config: CLIPVisionConfig, num_classes):
+    def __init__(self, config: CLIPVisionConfig, num_classes, decoder_num_heads, mlp_ratio, decoder_depth):
         super().__init__(config)
         # print(config)
 
         self.vision_model = CLIPVisionTransformer(config)
 
-        #self.visual_projection = nn.Linear(config.hidden_size, config.projection_dim, bias=False)
-
         prev_dim = config.hidden_size
-        #prev_dim = config.projection_dim
 
-#        self.extra_mlp = nn.Sequential(nn.Linear(prev_dim, prev_dim * 2, bias=False),
-#                                        nn.BatchNorm1d(prev_dim * 2),
-#                                        nn.ReLU(inplace=True), # first layer
-#                                        nn.Linear(prev_dim * 2, prev_dim // 2, bias=False),
-#                                        nn.BatchNorm1d(prev_dim // 2),
-#                                        nn.ReLU(inplace=True), # second layer
-#                                        nn.Linear(prev_dim // 2, prev_dim, bias=False),
-#                                        nn.BatchNorm1d(prev_dim, affine=False)) # output layer
-
+        if decoder_depth > 0:
+            self.decoder_blocks = nn.Sequential(*[Block(prev_dim, decoder_num_heads, mlp_ratio, qkv_bias=True) for i in range(decoder_depth)])
+        else:
+            self.decoder_blocks = None
+        
         self.classifier = nn.Linear(prev_dim, num_classes)
 
         self.post_init()
@@ -50,16 +44,13 @@ class CLIPVisionModelWithProjection(CLIPPreTrainedModel):
         if only_fc:
             return self.classifier(x)
 
-        vision_outputs = self.vision_model(pixel_values=x)[1]
+        vision_outputs = self.vision_model(pixel_values=x, output_hidden_states=False).last_hidden_state
 
-        #vision_outputs = self.visual_projection(vision_outputs)
+        if self.decoder_blocks is not None:
+            vision_outputs = self.decoder_blocks(vision_outputs)
         
-        #vision_outputs = self.extra_mlp(vision_outputs)
-
-
-        pooled_output = vision_outputs
-	
-
+        pooled_output = vision_outputs[:, 0, :]
+        
         if only_feat:
             return pooled_output
 
@@ -75,7 +66,7 @@ def openai_clip_vit_large_patch14(**kwargs):
     """ openai/clip-vit-large-patch14
     """
     print(kwargs)
-    model = CLIPVisionModelWithProjection.from_pretrained('openai/clip-vit-large-patch14', num_classes=kwargs['num_classes'])
+    model = CLIPVisionModelWithProjection.from_pretrained('openai/clip-vit-large-patch14', num_classes=kwargs['num_classes'], decoder_num_heads=kwargs['decoder_num_heads'], mlp_ratio=kwargs['decoder_mlp_ratio'], decoder_depth=kwargs['decoder_depth'])
     return model
 
 def openai_clip_vit_large_patch14_336(**kwargs):
