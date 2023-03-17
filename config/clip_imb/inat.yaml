@@ -1,0 +1,39 @@
+algorithm: fullysupervised 
+save_dir: ./saved_models/inat
+save_name: softmax_inat
+resume: True
+load_path: ./saved_models/inat/softmax_inat/latest_model.pth
+overwrite: True
+use_tensorboard: True
+use_wandb: False
+epoch: 10
+num_train_iter: 10240
+num_eval_iter: 128 #256
+num_log_iter: 128 #256
+batch_size: 512
+eval_batch_size: 512
+ema_m: 0 #0.999
+optim: SGD
+lr: 0.03
+momentum: 0.9
+weight_decay: 0.0005
+amp: True
+clip: 0.0
+net: openai_clip_vit_large_patch14
+net_from_name: False
+data_dir: /mnt/sda/public/iNaturalist18/
+dataset: inaturalist
+train_sampler: RandomSampler
+num_classes: 8142
+num_workers: 12
+seed: 0
+world_size: 1
+rank: 0
+multiprocessing_distributed: True
+dist_url: tcp://127.0.0.1:10122
+dist_backend: nccl
+gpu: 0
+freeze_backbone: False
+extra_fc: None
+sample_type: None
+loss_type: softmax
