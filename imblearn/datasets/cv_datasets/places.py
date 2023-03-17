@@ -26,7 +26,7 @@ def get_data_transform(split, rgb_mean, rbg_std, key='default'):
         'train': transforms.Compose([
             RandomResizedCropAndInterpolation((224, 224)),
             transforms.RandomHorizontalFlip(),
-            RandAugment(3, 10),
+            RandAugment(3, 9),
             transforms.ToTensor(),
             transforms.Normalize(rgb_mean, rbg_std),
         ]),
