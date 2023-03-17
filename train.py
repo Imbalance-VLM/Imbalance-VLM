@@ -99,6 +99,9 @@ def get_config():
     parser.add_argument('--loss_type', type=str, default=None, help='loss type')
     parser.add_argument('--freeze_backbone', type=str2bool, default=False, help='flag of freezing backbone')
     parser.add_argument('--extra_fc', type=str, default=None, help='extra classifier')
+    parser.add_argument('--decoder_depth', type=int, default=2, help='')
+    parser.add_argument('--decoder_mlp_ratio', type=int, default=2, help='')
+    parser.add_argument('--decoder_num_heads', type=int, default=4, help='')
  
 
     '''

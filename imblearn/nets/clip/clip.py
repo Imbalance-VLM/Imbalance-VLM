@@ -74,6 +74,7 @@ class CLIPVisionModelWithProjection(CLIPPreTrainedModel):
 def openai_clip_vit_large_patch14(**kwargs):
     """ openai/clip-vit-large-patch14
     """
+    print(kwargs)
     model = CLIPVisionModelWithProjection.from_pretrained('openai/clip-vit-large-patch14', num_classes=kwargs['num_classes'])
     return model
 

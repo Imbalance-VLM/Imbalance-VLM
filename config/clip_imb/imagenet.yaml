@@ -37,3 +37,6 @@ freeze_backbone: False
 extra_fc: None
 sample_type: None
 loss_type: softmax
+decoder_depth: 4
+decoder_mlp_ratio: 2
+decoder_num_heads: 4

@@ -187,14 +187,14 @@ class AlgorithmBase:
         """
         initialize model
         """
-        model = self.net_builder(num_classes=self.num_classes)
+        model = self.net_builder(num_classes=self.num_classes,decoder_depth=self.args.decoder_depth, decoder_mlp_ratio=self.args.decoder_mlp_ratio, decoder_num_heads=self.args.decoder_num_heads)
         return model
 
     def set_ema_model(self):
         """
         initialize ema model from model
         """
-        ema_model = self.net_builder(num_classes=self.num_classes)
+        ema_model = self.net_builder(num_classes=self.num_classes,decoder_depth=self.args.decoder_depth, decoder_mlp_ratio=self.args.decoder_mlp_ratio, decoder_num_heads=self.args.decoder_num_heads)
         ema_model.load_state_dict(self.model.state_dict())
         return ema_model
 

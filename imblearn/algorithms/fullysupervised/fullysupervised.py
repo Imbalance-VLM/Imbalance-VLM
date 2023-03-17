@@ -41,7 +41,7 @@ class FullySupervised(AlgorithmBase):
         return model
     
     def set_ema_model(self):
-        ema_model = self.net_builder(num_classes=self.num_classes)
+        ema_model = super().set_ema_model()
         if self.args.extra_fc == 'marc':
             ema_model = MARC_Net(self.args, ema_model, self.args.num_classes)
         if self.args.extra_fc == 'crt':
