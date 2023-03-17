@@ -89,7 +89,6 @@ class LT_Dataset(Dataset):
 
 def get_places(args, alg, name, num_classes, data_dir='./data'):
     # print(alg)
-    assert alg == 'fullysupervised' # imb dataset
     train_txt_path = 'assets/Places_LT/Places_LT_train.txt'
     val_txt_path = 'assets/Places_LT/Places_LT_val.txt'
     test_txt_path = 'assets/Places_LT/Places_LT_test.txt'

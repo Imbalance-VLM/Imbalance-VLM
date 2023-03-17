@@ -4,11 +4,11 @@
 
 from imblearn.core import AlgorithmBase
 from imblearn.core.utils import ALGORITHMS, count_parameters
-from imblearn.algorithms.fullysupervised.utils import cbw_loss, focal_loss, balanced_softmax, grw_loss, lade_loss, ldam_loss, MARC_Net, Crt_Net, Lws_Net, DisAlign_Net
+from imblearn.algorithms.supervised.utils import cbw_loss, focal_loss, balanced_softmax, grw_loss, lade_loss, ldam_loss, MARC_Net, Crt_Net, Lws_Net, DisAlign_Net
 import torch
 
-@ALGORITHMS.register('fullysupervised')
-class FullySupervised(AlgorithmBase):
+@ALGORITHMS.register('supervised')
+class Supervised(AlgorithmBase):
     """
         Train a fully supervised model using labeled data only. This serves as a baseline for comparison.
 
@@ -127,4 +127,3 @@ class FullySupervised(AlgorithmBase):
         self.call_hook("after_run")
 
 
-ALGORITHMS['supervised'] = FullySupervised

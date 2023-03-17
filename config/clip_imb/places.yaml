@@ -1,4 +1,4 @@
-algorithm: fullysupervised 
+algorithm: supervised 
 save_dir: ./saved_models/places
 save_name: softmax_places
 resume: True

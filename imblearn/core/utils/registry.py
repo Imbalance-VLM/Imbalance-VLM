@@ -5,7 +5,6 @@ import importlib
 
 __all__ = [
     'ALGORITHMS',
-    'IMB_ALGORITHMS',
 ]
 
 class Register:
@@ -47,7 +46,6 @@ class Register:
 
 
 ALGORITHMS = Register('algorithms')
-IMB_ALGORITHMS = Register('imb_algorithms')
 
 
 
@@ -64,7 +62,7 @@ def _handle_errors(errors):
 
 ALL_MODULES = [
     # NOTE: add all algorithms here
-    ('imblearn.algorithms', ['fullysupervised']),
+    ('imblearn.algorithms', ['supervised']),
 ]
 
 

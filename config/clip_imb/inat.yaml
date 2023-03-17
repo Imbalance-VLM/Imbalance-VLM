@@ -1,4 +1,4 @@
-algorithm: fullysupervised 
+algorithm: supervised 
 save_dir: ./saved_models/inat
 save_name: softmax_inat
 resume: True

@@ -146,7 +146,6 @@ def load_data(data_root, dataset, phase, batch_size, sampler_dic=None, num_worke
 
 def get_inaturalist(args, alg, name, num_classes, data_dir='./data'):
     # print(alg)
-    assert alg == 'fullysupervised' # imb dataset
     train_txt_path = 'assets/iNaturalist18/iNaturalist18_train.txt'
     val_txt_path = 'assets/iNaturalist18/iNaturalist18_val.txt'
 

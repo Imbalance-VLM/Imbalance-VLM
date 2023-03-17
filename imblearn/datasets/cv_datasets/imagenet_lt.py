@@ -88,7 +88,6 @@ class LT_Dataset(Dataset):
 
 def get_imagenet_lt(args, alg, name, num_classes, data_dir='./data'):
     # print(alg)
-    assert alg == 'fullysupervised' # imb dataset
     train_txt_path = 'assets/ImageNet_LT/ImageNet_LT_train.txt'
     val_txt_path = 'assets/ImageNet_LT/ImageNet_LT_val.txt'
 
