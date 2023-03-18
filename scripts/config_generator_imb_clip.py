@@ -6,6 +6,7 @@ Create the .yaml for each experiment
 """
 import os
 
+commands = []
 
 def create_configuration(cfg, cfg_file):
     cfg['save_name'] = "{dataset}_{loss_type}_{sample_type}_{extra_fc}_{seed}".format(
@@ -33,7 +34,10 @@ def create_configuration(cfg, cfg_file):
         for line in lines:
             w.writelines(line)
             w.write('\n')
-
+    
+    run_script = f"python3 train.py --c {alg_file + cfg['save_name']}.yaml > {os.path.join('./logs', cfg['save_name'])}.log 2>&1\n"
+    commands.append(run_script)
+    print(run_script)
 
 def create_classific_config(alg, seed,
                             dataset, data_dir, net, num_classes, 
@@ -49,7 +53,7 @@ def create_classific_config(alg, seed,
     else:
         cfg['freeze_backbone'] = False
     # save config
-    cfg['save_dir'] = './saved_models/imb_clip'
+    cfg['save_dir'] = './saved_models'
     cfg['save_name'] = None
     cfg['resume'] = False
     cfg['load_path'] = None
@@ -112,14 +116,14 @@ def create_classific_config(alg, seed,
 # prepare the configuration for baseline model, use_penalty == False
 def exp_imb_clip(config_file,imb_algs):
     #config_file = r'./config/imb_clip/'
-    save_path = r'./saved_models/imb_clip'
+    save_path = r'./saved_models'
 
     if not os.path.exists(config_file):
         os.makedirs(config_file)
     if not os.path.exists(save_path):
         os.makedirs(save_path)
 
-    datasets = [('imagenet_lt', '/mnt/sda/public/ILSVRC/'), ('places', '/mnt/sda/public/Places365_256/places365_standard/'), ('inaturalist', '/mnt/sda/public/iNaturalist18/')]
+    datasets = [('imagenet_lt', '/home/yzh/ILSVRC/'), ('places', '/mnt/sda/public/Places365_256/places365_standard/'), ('inaturalist', '/mnt/sda/public/iNaturalist18/')]
 
 
     # algs = ['flexmatch', 'fixmatch', 'uda', 'pseudolabel', 'fullysupervised', 'supervised', 'remixmatch', 'mixmatch', 'meanteacher',
@@ -227,3 +231,5 @@ if __name__ == '__main__':
     ]
     exp_imb_clip(stage2_config_path,stage2_imb_algs)
 
+    with open('all_commands.txt', 'w') as f:
+        f.writelines(commands)
