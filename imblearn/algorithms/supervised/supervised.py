@@ -38,6 +38,8 @@ class Supervised(AlgorithmBase):
             model = Lws_Net(self.args, model, self.args.num_classes)
         if self.args.extra_fc == 'disalign': # https://arxiv.org/abs/2103.16370
             model = DisAlign_Net(self.args, model, self.args.num_classes)
+        torch.set_float32_matmul_precision('high') 
+        model = torch.compile(model)
         return model
     
     def set_ema_model(self):
@@ -50,6 +52,8 @@ class Supervised(AlgorithmBase):
             ema_model = Lws_Net(self.args, ema_model, self.args.num_classes)
         if self.args.extra_fc == 'disalign':
             ema_model = DisAlign_Net(self.args, ema_model, self.args.num_classes)
+        torch.set_float32_matmul_precision('high') 
+        ema_model = torch.compile(ema_model)
         ema_model.load_state_dict(self.check_prefix_state_dict(self.model.state_dict()))
         return ema_model
 

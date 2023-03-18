@@ -1,4 +1,4 @@
-name: pt2
+name: imbclip
 channels:
   - pytorch
   - nvidia
@@ -167,4 +167,4 @@ dependencies:
     - werkzeug==2.1.2
     - xmltodict==0.13.0
     - zipp==3.8.0
-prefix: /home/yzh/anaconda3/envs/pt2
+prefix: /home/yzh/anaconda3/envs/imbclip

@@ -92,6 +92,6 @@ def openai_clip_vit_base_patch32(**kwargs):
     """ openai/clip-vit-base-patch32
     """
     model = CLIPVisionModelWithProjection.from_pretrained('openai/clip-vit-large-patch32', num_classes=kwargs['num_classes'], decoder_num_heads=kwargs['decoder_num_heads'], mlp_ratio=kwargs['decoder_mlp_ratio'], decoder_depth=kwargs['decoder_depth'])
-    torch.set_float32_matmul_precision('high') 
-    model = torch.compile(model)
+    #torch.set_float32_matmul_precision('high') 
+    #model = torch.compile(model)
     return model

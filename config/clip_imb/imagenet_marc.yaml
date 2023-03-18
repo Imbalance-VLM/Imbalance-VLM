@@ -2,7 +2,7 @@ algorithm: supervised
 save_dir: ./saved_models/imagenet
 save_name: marc_imagenet
 resume: True
-stage1_path: ./saved_models/imagenet/marc_imagenet/model_best.pth
+stage1_path: ./saved_models/imagenet/softmax_imagenet/model_best.pth
 load_path: ./saved_models/imagenet/marc_imagenet/latest_model.pth
 overwrite: True
 use_tensorboard: True
