@@ -38,8 +38,6 @@ class Supervised(AlgorithmBase):
             model = Lws_Net(self.args, model, self.args.num_classes)
         if self.args.extra_fc == 'disalign': # https://arxiv.org/abs/2103.16370
             model = DisAlign_Net(self.args, model, self.args.num_classes)
-        torch.set_float32_matmul_precision('high') 
-        model = torch.compile(model)
         return model
     
     def set_ema_model(self):
@@ -52,8 +50,6 @@ class Supervised(AlgorithmBase):
             ema_model = Lws_Net(self.args, ema_model, self.args.num_classes)
         if self.args.extra_fc == 'disalign':
             ema_model = DisAlign_Net(self.args, ema_model, self.args.num_classes)
-        torch.set_float32_matmul_precision('high') 
-        ema_model = torch.compile(ema_model)
         ema_model.load_state_dict(self.check_prefix_state_dict(self.model.state_dict()))
         return ema_model
 
@@ -88,7 +84,6 @@ class Supervised(AlgorithmBase):
             elif self.loss_type == 'ldam_loss': # https://arxiv.org/abs/1906.07413
                 sup_loss = ldam_loss(logits_x_lb,y_lb,self.lb_cls_num,reduction='mean')
         
-        print(self.it,sup_loss)
         out_dict = self.process_out_dict(loss=sup_loss)
         log_dict = self.process_log_dict(sup_loss=sup_loss.item())
         return out_dict, log_dict

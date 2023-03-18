@@ -43,8 +43,11 @@ def create_classific_config(alg, seed,
     cfg['loss_type'] = alg['loss_type']
     cfg['sample_type'] = alg['sample_type']
     cfg['extra_fc'] = alg['extra_fc']
-    
-    
+    if cfg['extra_fc'] is not None:
+        cfg['freeze_backbone'] = True 
+        cfg['stage1_path'] = "./saved_models/{dataset}_{loss_type}_{sample_type}_{extra_fc}_{seed}/model_best.pth".format(dataset=dataset,loss_type='softmax',sample_type=None,extra_fc=None,seed=seed)
+    else:
+        cfg['freeze_backbone'] = False
     # save config
     cfg['save_dir'] = './saved_models/imb_clip'
     cfg['save_name'] = None
@@ -52,30 +55,26 @@ def create_classific_config(alg, seed,
     cfg['load_path'] = None
     cfg['overwrite'] = True
     cfg['use_tensorboard'] = True
-    cfg['use_wandb'] = True
+    cfg['use_wandb'] = False
 
     # algorithm config
-    cfg['epoch'] = 100
-    cfg['num_train_iter'] = 2 ** 20
-    cfg['num_eval_iter'] = 2048
-    cfg['num_log_iter'] = 256
-    cfg['batch_size'] = 64
+    cfg['epoch'] = 10
+    cfg['num_train_iter'] = 30
+    cfg['num_eval_iter'] = 30
+    cfg['num_log_iter'] = 10
+    cfg['batch_size'] = 10
     cfg['eval_batch_size'] = 256
     # cfg['img']
-    cfg['ema_m'] = 0.999
-    cfg['crop_ratio'] = 0.875
+    cfg['ema_m'] = 0.0
 
     # optim config
     cfg['optim'] = 'SGD'
     cfg['lr'] = 0.03
     cfg['momentum'] = 0.9
     cfg['weight_decay'] = weight_decay
-    cfg['layer_decay'] = 1.0
     cfg['amp'] = False
-    cfg['clip'] = 0.0
-    cfg['use_cat'] = True
+    cfg['clip'] = 1.0
 
-    # net config
     cfg['net'] = net
     cfg['net_from_name'] = False
 
@@ -84,7 +83,7 @@ def create_classific_config(alg, seed,
     cfg['dataset'] = dataset
     cfg['train_sampler'] = 'RandomSampler'
     cfg['num_classes'] = num_classes
-    cfg['num_workers'] = 1
+    cfg['num_workers'] = 12
 
     # basic config
     cfg['seed'] = seed
@@ -95,20 +94,24 @@ def create_classific_config(alg, seed,
     cfg['multiprocessing_distributed'] = True
     cfg['dist_url'] = 'tcp://127.0.0.1:' + str(port)
     cfg['dist_backend'] = 'nccl'
-    cfg['gpu'] = None
+    cfg['gpu'] = 0
 
     # other config
     cfg['overwrite'] = True
     cfg['amp'] = False
     cfg['use_wandb'] = False
 
+    cfg['decoder_depth'] = 3
+    cfg['decoder_mlp_ratio'] = 0.5
+    cfg['decoder_num_heads'] = 4
+
     return cfg
 
 
 
 # prepare the configuration for baseline model, use_penalty == False
-def exp_imb_clip():
-    config_file = r'./config/imb_clip/'
+def exp_imb_clip(config_file,imb_algs):
+    #config_file = r'./config/imb_clip/'
     save_path = r'./saved_models/imb_clip'
 
     if not os.path.exists(config_file):
@@ -122,11 +125,21 @@ def exp_imb_clip():
     # algs = ['flexmatch', 'fixmatch', 'uda', 'pseudolabel', 'fullysupervised', 'supervised', 'remixmatch', 'mixmatch', 'meanteacher',
     #         'pimodel', 'vat', 'dash', 'crmatch', 'comatch', 'simmatch', 'adamatch', 'freematch', 'softmatch']
     
-    imb_algs = [
-        {'loss_type': 'ldam_loss', 'sample_type': 'cbs', 'extra_fc': 'marc'},
-        {'loss_type': 'ldam_loss', 'sample_type': 'cbs', 'extra_fc': 'marc'},
-        {'loss_type': 'ldam_loss', 'sample_type': 'cbs', 'extra_fc': 'marc'},
-    ]
+   # imb_algs = [
+   #     {'loss_type': 'softmax', 'sample_type': None, 'extra_fc': None},
+   #     {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': None},
+   #     {'loss_type': 'cbw_loss', 'sample_type': None, 'extra_fc': None},
+   #     {'loss_type': 'focal_loss', 'sample_type': None, 'extra_fc': None},
+   #     {'loss_type': 'balanced_softmax', 'sample_type': None, 'extra_fc': None},
+   #     {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
+   #     {'loss_type': 'lade_loss', 'sample_type': None, 'extra_fc': None},
+   #     {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
+   #     {'loss_type': 'ldam_loss', 'sample_type': None, 'extra_fc': None},
+   #     {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': 'crt'},
+   #     {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': 'lws'},
+   #     {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': 'disalign'},
+   #     {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': 'marc'},
+   # ]
 
     nets = [
         'openai_clip_vit_large_patch14'
@@ -165,7 +178,52 @@ def exp_imb_clip():
 
 
 if __name__ == '__main__':
-    if not os.path.exists('./config/imb_clip/'):
-        os.mkdir('./config/imb_clip/')
 
-    exp_imb_clip()
+    stage1_config_path = r'./config/imb_clip_stage1_algs/'
+    stage2_config_path = r'./config/imb_clip_stage2_algs/'
+
+    if not os.path.exists(stage1_config_path):
+        os.mkdir(stage1_config_path)
+    else:
+        import shutil
+        shutil.rmtree(stage1_config_path)
+        os.mkdir(stage1_config_path)
+    
+    if not os.path.exists(stage2_config_path):
+        os.mkdir(stage2_config_path)
+    else:
+        import shutil
+        shutil.rmtree(stage2_config_path)
+        os.mkdir(stage2_config_path)
+
+
+    stage1_imb_algs = [
+        {'loss_type': 'softmax', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': None},
+        {'loss_type': 'cbw_loss', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'focal_loss', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'balanced_softmax', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'lade_loss', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'ldam_loss', 'sample_type': None, 'extra_fc': None},
+    ]
+    exp_imb_clip(stage1_config_path,stage1_imb_algs)
+    
+    stage2_imb_algs = [
+        {'loss_type': 'softmax', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': None},
+        {'loss_type': 'cbw_loss', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'focal_loss', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'balanced_softmax', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'lade_loss', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'ldam_loss', 'sample_type': None, 'extra_fc': None},
+        {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': 'crt'},
+        {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': 'lws'},
+        {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': 'disalign'},
+        {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': 'marc'},
+    ]
+    exp_imb_clip(stage2_config_path,stage2_imb_algs)
+

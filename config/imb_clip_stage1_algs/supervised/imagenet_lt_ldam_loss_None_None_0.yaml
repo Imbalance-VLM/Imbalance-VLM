@@ -1,24 +1,28 @@
-algorithm: supervised 
-save_dir: ./saved_models/imagenet
-save_name: softmax_imagenet
+algorithm: supervised
+loss_type: ldam_loss
+sample_type: None
+extra_fc: None
+freeze_backbone: False
+save_dir: ./saved_models/imb_clip
+save_name: imagenet_lt_ldam_loss_None_None_0
 resume: True
-load_path: ./saved_models/imagenet/softmax_imagenet/latest_model.pth
+load_path: ./saved_models/imb_clip/imagenet_lt_ldam_loss_None_None_0/latest_model.pth
 overwrite: True
 use_tensorboard: True
 use_wandb: False
 epoch: 10
-num_train_iter: 10240
-num_eval_iter: 10 #128 #256
-num_log_iter: 128 #256
-batch_size: 256
+num_train_iter: 30
+num_eval_iter: 30
+num_log_iter: 10
+batch_size: 10
 eval_batch_size: 256
-ema_m: 0 #0.999
+ema_m: 0.0
 optim: SGD
 lr: 0.03
 momentum: 0.9
 weight_decay: 0.0005
 amp: False
-clip: 0.0
+clip: 1.0
 net: openai_clip_vit_large_patch14
 net_from_name: False
 data_dir: /mnt/sda/public/ILSVRC/
@@ -30,13 +34,9 @@ seed: 0
 world_size: 1
 rank: 0
 multiprocessing_distributed: True
-dist_url: tcp://127.0.0.1:10187
+dist_url: tcp://127.0.0.1:10025
 dist_backend: nccl
 gpu: 0
-freeze_backbone: False
-extra_fc: None
-sample_type: None
-loss_type: softmax
-decoder_depth: 4
-decoder_mlp_ratio: 2
+decoder_depth: 3
+decoder_mlp_ratio: 0.5
 decoder_num_heads: 4
