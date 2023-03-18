@@ -25,9 +25,9 @@ class WANDBHook(Hook):
         # tages
         benchmark = f'benchmark: {project}'
         dataset = f'dataset: {algorithm.args.dataset}'
-        data_setting = f'setting: {algorithm.args.dataset}_lb{algorithm.args.num_labels}_{algorithm.args.lb_imb_ratio}_ulb{algorithm.args.ulb_num_labels}_{algorithm.args.ulb_imb_ratio}'
-        alg = f'alg: {algorithm.args.algorithm}'
-        imb_alg = f'imb_alg: {algorithm.args.imb_algorithm}'
+        data_setting = f'setting: d{algorithm.args.decoder_depth}_mlpr{algorithm.args.decoder_mlp_ratio}'
+        alg = f'alg: {algorithm.args.loss_type}'
+        imb_alg = f'imb_alg: {algorithm.args.sample_type}'
         tags = [benchmark, dataset, data_setting, alg, imb_alg] 
         if algorithm.args.resume:
             resume = 'auto'
