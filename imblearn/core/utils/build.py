@@ -63,8 +63,7 @@ def get_dataset(args, algorithm, dataset, num_classes, data_dir='./data'):
     elif dataset == 'places': # imb
         lb_dset, eval_dset, test_dset = get_places(args, algorithm, dataset,  num_classes, data_dir=data_dir)
     elif dataset == 'imagenet_lt': # imb
-        lb_dset, eval_dset = get_imagenet_lt(args, algorithm, dataset,  num_classes, data_dir=data_dir)
-        test_dset = None
+        lb_dset, eval_dset, test_dset = get_imagenet_lt(args, algorithm, dataset,  num_classes, data_dir=data_dir)
 
     dataset_dict = {'train_lb': lb_dset, 'eval': eval_dset, 'test': test_dset}
     return dataset_dict

@@ -49,7 +49,7 @@ def create_classific_config(alg, seed,
     else:
         cfg['freeze_backbone'] = False
     # save config
-    cfg['save_dir'] = './saved_models/imb_clip'
+    cfg['save_dir'] = './saved_models/'
     cfg['save_name'] = None
     cfg['resume'] = False
     cfg['load_path'] = None
@@ -59,10 +59,11 @@ def create_classific_config(alg, seed,
 
     # algorithm config
     cfg['epoch'] = 10
+    cfg['num_warmup_iter'] = 10
     cfg['num_train_iter'] = 30
     cfg['num_eval_iter'] = 30
     cfg['num_log_iter'] = 10
-    cfg['batch_size'] = 10
+    cfg['batch_size'] = 256
     cfg['eval_batch_size'] = 256
     # cfg['img']
     cfg['ema_m'] = 0.0
@@ -131,7 +132,6 @@ def exp_imb_clip(config_file,imb_algs):
    #     {'loss_type': 'cbw_loss', 'sample_type': None, 'extra_fc': None},
    #     {'loss_type': 'focal_loss', 'sample_type': None, 'extra_fc': None},
    #     {'loss_type': 'balanced_softmax', 'sample_type': None, 'extra_fc': None},
-   #     {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
    #     {'loss_type': 'lade_loss', 'sample_type': None, 'extra_fc': None},
    #     {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
    #     {'loss_type': 'ldam_loss', 'sample_type': None, 'extra_fc': None},
@@ -205,21 +205,11 @@ if __name__ == '__main__':
         {'loss_type': 'balanced_softmax', 'sample_type': None, 'extra_fc': None},
         {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
         {'loss_type': 'lade_loss', 'sample_type': None, 'extra_fc': None},
-        {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
         {'loss_type': 'ldam_loss', 'sample_type': None, 'extra_fc': None},
     ]
     exp_imb_clip(stage1_config_path,stage1_imb_algs)
     
     stage2_imb_algs = [
-        {'loss_type': 'softmax', 'sample_type': None, 'extra_fc': None},
-        {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': None},
-        {'loss_type': 'cbw_loss', 'sample_type': None, 'extra_fc': None},
-        {'loss_type': 'focal_loss', 'sample_type': None, 'extra_fc': None},
-        {'loss_type': 'balanced_softmax', 'sample_type': None, 'extra_fc': None},
-        {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
-        {'loss_type': 'lade_loss', 'sample_type': None, 'extra_fc': None},
-        {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
-        {'loss_type': 'ldam_loss', 'sample_type': None, 'extra_fc': None},
         {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': 'crt'},
         {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': 'lws'},
         {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': 'disalign'},

@@ -27,9 +27,14 @@ class Supervised(AlgorithmBase):
         self.loss_type = args.loss_type
         self.freeze_backbone = args.freeze_backbone
         self.extra_fc = args.extra_fc
-    
+        self.args = args
+
     def set_model(self):
         model = super().set_model()
+        if 'stage1_path' in self.args:
+            stage1_checkpoint = torch.load(self.args.stage1_path, map_location='cpu')
+            model.load_state_dict(self.check_prefix_state_dict(stage1_checkpoint['model']))
+            self.print_fn('Stage 1 Model loaded')
         if self.args.extra_fc == 'marc': # https://arxiv.org/abs/2112.07225
             model = MARC_Net(self.args, model, self.args.num_classes)
         if self.args.extra_fc == 'crt': # https://arxiv.org/abs/1910.09217
