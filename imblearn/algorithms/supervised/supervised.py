@@ -117,7 +117,6 @@ class Supervised(AlgorithmBase):
             self.call_hook("before_train_epoch")
 
             for data_lb in self.loader_dict['train_lb']:
-
                 # prevent the training iterations exceed args.num_train_iter
                 if self.it > self.num_train_iter:
                     break
