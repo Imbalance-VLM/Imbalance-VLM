@@ -49,7 +49,7 @@ def create_classific_config(alg, seed,
     else:
         cfg['freeze_backbone'] = False
     # save config
-    cfg['save_dir'] = './saved_models/'
+    cfg['save_dir'] = './saved_models'
     cfg['save_name'] = None
     cfg['resume'] = False
     cfg['load_path'] = None
@@ -58,11 +58,11 @@ def create_classific_config(alg, seed,
     cfg['use_wandb'] = False
 
     # algorithm config
-    cfg['epoch'] = 10
-    cfg['num_warmup_iter'] = 10
-    cfg['num_train_iter'] = 30
-    cfg['num_eval_iter'] = 30
-    cfg['num_log_iter'] = 10
+    cfg['epoch'] = 16
+    cfg['num_warmup_iter'] = 512
+    cfg['num_train_iter'] = 4096
+    cfg['num_eval_iter'] = 256
+    cfg['num_log_iter'] = 1
     cfg['batch_size'] = 256
     cfg['eval_batch_size'] = 256
     # cfg['img']
@@ -70,11 +70,18 @@ def create_classific_config(alg, seed,
 
     # optim config
     cfg['optim'] = 'SGD'
-    cfg['lr'] = 0.03
+    if dataset == 'imagenet_lt':
+        cfg['lr'] = 0.03
+    elif dataset == 'places':
+        cfg['lr'] = 0.03
+    elif dataset == 'inaturalist':
+        cfg['lr'] = 0.03
+
+
     cfg['momentum'] = 0.9
     cfg['weight_decay'] = weight_decay
     cfg['amp'] = False
-    cfg['clip'] = 1.0
+    cfg['clip'] = 0.0
 
     cfg['net'] = net
     cfg['net_from_name'] = False
@@ -100,7 +107,7 @@ def create_classific_config(alg, seed,
     # other config
     cfg['overwrite'] = True
     cfg['amp'] = False
-    cfg['use_wandb'] = False
+    cfg['use_wandb'] = True
 
     cfg['decoder_depth'] = 3
     cfg['decoder_mlp_ratio'] = 0.5
@@ -120,7 +127,7 @@ def exp_imb_clip(config_file,imb_algs):
     if not os.path.exists(save_path):
         os.makedirs(save_path)
 
-    datasets = [('imagenet_lt', '/mnt/sda/public/ILSVRC/'), ('places', '/mnt/sda/public/Places365_256/places365_standard/'), ('inaturalist', '/mnt/sda/public/iNaturalist18/')]
+    datasets = [('imagenet_lt', '/home/yzh/ILSVRC'), ('places', '/mnt/sda/public/Places365_256/places365_standard/'), ('inaturalist', '/mnt/sda/public/iNaturalist18/')]
 
 
     # algs = ['flexmatch', 'fixmatch', 'uda', 'pseudolabel', 'fullysupervised', 'supervised', 'remixmatch', 'mixmatch', 'meanteacher',
