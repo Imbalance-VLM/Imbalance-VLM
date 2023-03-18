@@ -8,7 +8,7 @@ use_tensorboard: True
 use_wandb: False
 epoch: 10
 num_train_iter: 10240
-num_eval_iter: 128 #256
+num_eval_iter: 10 #128 #256
 num_log_iter: 128 #256
 batch_size: 256
 eval_batch_size: 256
@@ -17,7 +17,7 @@ optim: SGD
 lr: 0.03
 momentum: 0.9
 weight_decay: 0.0005
-amp: True
+amp: False
 clip: 0.0
 net: openai_clip_vit_large_patch14
 net_from_name: False
@@ -37,6 +37,6 @@ freeze_backbone: False
 extra_fc: None
 sample_type: None
 loss_type: softmax
-decoder_depth: 2
+decoder_depth: 4
 decoder_mlp_ratio: 2
 decoder_num_heads: 4

@@ -18,7 +18,7 @@ optim: SGD
 lr: 0.03
 momentum: 0.9
 weight_decay: 0.0005
-amp: True
+amp: False
 clip: 0.0
 net: openai_clip_vit_large_patch14
 net_from_name: False
