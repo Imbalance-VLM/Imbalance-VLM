@@ -4,10 +4,10 @@ sample_type: None
 extra_fc: disalign
 freeze_backbone: True
 stage1_path: ./saved_models/imagenet_lt_softmax_None_None_0/model_best.pth
-save_dir: ./saved_models/imb_clip
+save_dir: ./saved_models/
 save_name: imagenet_lt_grw_loss_None_disalign_0
 resume: True
-load_path: ./saved_models/imb_clip/imagenet_lt_grw_loss_None_disalign_0/latest_model.pth
+load_path: ./saved_models//imagenet_lt_grw_loss_None_disalign_0/latest_model.pth
 overwrite: True
 use_tensorboard: True
 use_wandb: False
@@ -15,7 +15,7 @@ epoch: 10
 num_train_iter: 30
 num_eval_iter: 30
 num_log_iter: 10
-batch_size: 10
+batch_size: 256
 eval_batch_size: 256
 ema_m: 0.0
 optim: SGD
@@ -35,7 +35,7 @@ seed: 0
 world_size: 1
 rank: 0
 multiprocessing_distributed: True
-dist_url: tcp://127.0.0.1:10034
+dist_url: tcp://127.0.0.1:10007
 dist_backend: nccl
 gpu: 0
 decoder_depth: 3

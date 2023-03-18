@@ -3,10 +3,10 @@ loss_type: lade_loss
 sample_type: None
 extra_fc: None
 freeze_backbone: False
-save_dir: ./saved_models/imb_clip
+save_dir: ./saved_models/
 save_name: inaturalist_lade_loss_None_None_0
 resume: True
-load_path: ./saved_models/imb_clip/inaturalist_lade_loss_None_None_0/latest_model.pth
+load_path: ./saved_models//inaturalist_lade_loss_None_None_0/latest_model.pth
 overwrite: True
 use_tensorboard: True
 use_wandb: False
@@ -14,7 +14,7 @@ epoch: 10
 num_train_iter: 30
 num_eval_iter: 30
 num_log_iter: 10
-batch_size: 10
+batch_size: 256
 eval_batch_size: 256
 ema_m: 0.0
 optim: SGD
