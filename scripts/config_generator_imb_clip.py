@@ -59,14 +59,14 @@ def create_classific_config(alg, seed,
     cfg['load_path'] = None
     cfg['overwrite'] = True
     cfg['use_tensorboard'] = True
-    cfg['use_wandb'] = False
+    cfg['use_wandb'] = True
 
     # algorithm config
-    cfg['epoch'] = 16
+    cfg['epoch'] = 32
     cfg['num_warmup_iter'] = 512
-    cfg['num_train_iter'] = 4096
+    cfg['num_train_iter'] = 8192
     cfg['num_eval_iter'] = 256
-    cfg['num_log_iter'] = 1
+    cfg['num_log_iter'] = 4
     cfg['batch_size'] = 256
     cfg['eval_batch_size'] = 256
     # cfg['img']
@@ -85,7 +85,7 @@ def create_classific_config(alg, seed,
     cfg['momentum'] = 0.9
     cfg['weight_decay'] = weight_decay
     cfg['amp'] = False
-    cfg['clip'] = 0.0
+    cfg['clip'] = 1.0
 
     cfg['net'] = net
     cfg['net_from_name'] = False
@@ -131,7 +131,7 @@ def exp_imb_clip(config_file,imb_algs):
     if not os.path.exists(save_path):
         os.makedirs(save_path)
 
-    datasets = [('imagenet_lt', '/home/yzh/ILSVRC/'), ('places', '/mnt/sda/public/Places365_256/places365_standard/'), ('inaturalist', '/home/yzh/iNaturalist/')]
+    datasets = [('imagenet_lt', '/home/yzh/ILSVRC/'), ('places', '/home/yzh/Places/places365_standard/'), ('inaturalist', '/home/yzh/iNaturalist/')]
 
 
     # algs = ['flexmatch', 'fixmatch', 'uda', 'pseudolabel', 'fullysupervised', 'supervised', 'remixmatch', 'mixmatch', 'meanteacher',
