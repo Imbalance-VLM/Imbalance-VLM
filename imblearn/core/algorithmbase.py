@@ -4,6 +4,7 @@
 import os
 import contextlib
 import numpy as np
+import copy
 from inspect import signature
 from collections import OrderedDict
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
@@ -108,6 +109,8 @@ class AlgorithmBase:
 
     def get_freq(self,targets):
         self.lb_freq = np.zeros(self.num_classes)
+        self.training_labels = copy.deepcopy(targets)
+        self.training_labels = np.array(self.training_labels).astype(int) 
         for i in range(len(targets)):
             self.lb_freq[targets[i]] += 1
         self.lb_freq = torch.tensor(self.lb_freq).cuda(self.gpu)
@@ -320,7 +323,7 @@ class AlgorithmBase:
         """
         self.model.eval()
         self.ema.apply_shadow()
-
+        
         eval_loader = self.loader_dict[eval_dest]
         total_loss = 0.0
         total_num = 0.0
@@ -357,18 +360,57 @@ class AlgorithmBase:
         precision = precision_score(y_true, y_pred, average='macro')
         recall = recall_score(y_true, y_pred, average='macro')
         F1 = f1_score(y_true, y_pred, average='macro')
-
+        many_shot_acc, median_shot_acc, few_shot_acc = self.shot_acc(y_pred, y_true)
         cf_mat = confusion_matrix(y_true, y_pred, normalize='true')
         self.print_fn('confusion matrix:\n' + np.array_str(cf_mat))
         self.ema.restore()
         self.model.train()
 
-        eval_dict = {eval_dest+'/loss': total_loss / total_num, eval_dest+'/top-1-acc': top1, 
-                     eval_dest+'/balanced_acc': balanced_top1, eval_dest+'/precision': precision, eval_dest+'/recall': recall, eval_dest+'/F1': F1}
+        eval_dict = {eval_dest+'/loss': total_loss / total_num, eval_dest+'/top-1-acc': top1, eval_dest+'/many-shot-acc': many_shot_acc, eval_dest+'/median-shot-acc': median_shot_acc,eval_dest+'/few-shot-acc': few_shot_acc, eval_dest+'/balanced_acc': balanced_top1, eval_dest+'/precision': precision, eval_dest+'/recall': recall, eval_dest+'/F1': F1}
         if return_logits:
             eval_dict[eval_dest+'/logits'] = y_logits
         return eval_dict
 
+    def shot_acc(self, preds, labels, many_shot_thr=100, low_shot_thr=20, acc_per_cls=False):
+        training_labels = self.training_labels
+        if isinstance(preds, torch.Tensor):
+            preds = preds.detach().cpu().numpy()
+            labels = labels.detach().cpu().numpy()
+        elif isinstance(preds, np.ndarray):
+            pass
+        else:
+            raise TypeError('Type ({}) of preds not supported'.format(type(preds)))
+        train_class_count = []
+        test_class_count = []
+        class_correct = []
+        for l in np.unique(labels):
+            train_class_count.append(len(training_labels[training_labels == l]))
+            test_class_count.append(len(labels[labels == l]))
+            class_correct.append((preds[labels == l] == labels[labels == l]).sum())
+
+        many_shot = []
+        median_shot = []
+        low_shot = []
+        for i in range(len(train_class_count)):
+            if train_class_count[i] > many_shot_thr:
+                many_shot.append((class_correct[i] / test_class_count[i]))
+            elif train_class_count[i] < low_shot_thr:
+                low_shot.append((class_correct[i] / test_class_count[i]))
+            else:
+                median_shot.append((class_correct[i] / test_class_count[i]))
+
+        if len(many_shot) == 0:
+            many_shot.append(0)
+        if len(median_shot) == 0:
+            median_shot.append(0)
+        if len(low_shot) == 0:
+            low_shot.append(0)
+
+        if acc_per_cls:
+            class_accs = [c / cnt for c, cnt in zip(class_correct, test_class_count)]
+            return np.mean(many_shot), np.mean(median_shot), np.mean(low_shot), class_accs
+        else:
+            return np.mean(many_shot), np.mean(median_shot), np.mean(low_shot)
 
     def get_save_dict(self):
         """
