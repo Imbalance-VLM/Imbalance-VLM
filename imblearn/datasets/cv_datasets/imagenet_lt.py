@@ -89,18 +89,20 @@ def get_imagenet_lt(args, alg, name, num_classes, data_dir='./data'):
     # print(alg)
     train_txt_path = 'assets/ImageNet_LT/ImageNet_LT_train.txt'
     val_txt_path = 'assets/ImageNet_LT/ImageNet_LT_val.txt'
-
+    test_txt_path = 'assets/ImageNet_LT/ImageNet_LT_test.txt'
     # print(os.listdir('assets/ImageNet_LT/'))
 
     rgb_mean, rgb_std = RGB_statistics['ImageNet_LT']['mean'], RGB_statistics['ImageNet_LT']['std']
 
     train_transform = get_data_transform('train', rgb_mean, rgb_std, 'ImageNet_LT')
     val_transform = get_data_transform('val', rgb_mean, rgb_std, 'ImageNet_LT')
+    test_transform = get_data_transform('test', rgb_mean, rgb_std, 'ImageNet_LT')
 
     trainset = LT_Dataset(data_dir, train_txt_path, train_transform)
     valset = LT_Dataset(data_dir, val_txt_path, val_transform)
+    testset = LT_Dataset(data_dir, test_txt_path, test_transform)
 
-    print(f'Dataset size: train {len(trainset)}, val {len(valset)}')
+    print(f'Dataset size: train {len(trainset)}, val {len(valset)}  test {len(testset)}')
 
-    return trainset, valset
+    return trainset, valset, testset
     

@@ -90,7 +90,8 @@ class Crt_Net(nn.Module):
             return self.backbone(x,only_feat=True)
         if only_fc is True:
             return self.backbone(x,only_fc=True)
-
+        else:
+            return {'logits': self.backbone(x)['logits']}
 class Lws_Net(nn.Module):
     def __init__(self,args, base, num_classes):
         super(Lws_Net, self).__init__()
@@ -104,6 +105,8 @@ class Lws_Net(nn.Module):
             return self.backbone(x,only_feat=True)
         if only_fc is True:
             return self.scales * self.backbone(x,only_fc=True)
+        else:
+            return {'logits': self.scales * self.backbone(x)['logits']}
 
 class DisAlign_Net(nn.Module):
     def __init__(self,args, base, num_classes):
@@ -123,7 +126,13 @@ class DisAlign_Net(nn.Module):
         if only_fc is True:
             confidence = self.confidence_layer(feat).sigmoid()
             return (1 + confidence * self.logit_scale) * x + confidence * self.logit_bias
-            
+        else:
+            feats_x = self.backbone(x,only_feat=True)
+            logits_x = self.backbone(feats_x,only_fc=True)
+            confidence = self.confidence_layer(feats_x).sigmoid()
+            return {'logits': (1 + confidence * self.logit_scale) * logits_x + confidence * self.logit_bias}
+
+ 
 
 
 class MARC_Net(nn.Module):
@@ -146,3 +155,6 @@ class MARC_Net(nn.Module):
             return self.backbone(x)
         if only_fc is True:
             return self.a * x['logits'] + self.b * self.w_norm
+        else:
+            logits = self.backbone(x)['logits']
+            return {'logits': self.a *logits + self.b * self.w_norm }
