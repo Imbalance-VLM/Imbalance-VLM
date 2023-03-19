@@ -118,7 +118,7 @@ class DisAlign_Net(nn.Module):
         self.logit_bias = nn.Parameter(torch.zeros(1, args.num_classes))
         self.confidence_layer = nn.Linear(self.backbone.num_features, 1)
  
-    def forward(self, x, feat, only_feat = False, only_fc = False):
+    def forward(self, x, feat=None, only_feat = False, only_fc = False):
         if only_feat is True:
             feats_x = self.backbone(x,only_feat=True)
             logits_x = self.backbone(feats_x,only_fc=True) 
