@@ -145,12 +145,12 @@ if __name__ == "__main__":
             y_pred.extend(torch.max(logits, dim=-1)[1].cpu().tolist())
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
-    top1 = accuracy_score(y_true, y_pred)
-    precision = precision_score(y_true, y_pred, average='macro')
-    recall = recall_score(y_true, y_pred, average='macro')
-    F1 = f1_score(y_true, y_pred, average='macro')
+    top1 = accuracy_score(y_true, y_pred) * 100
+    precision = precision_score(y_true, y_pred, average='macro') *100
+    recall = recall_score(y_true, y_pred, average='macro') *100
+    F1 = f1_score(y_true, y_pred, average='macro') *100
     many_shot_acc, median_shot_acc, few_shot_acc = shot_acc(training_labels ,y_pred, y_true)
-   
+    many_shot_acc, median_shot_acc, few_shot_acc = many_shot_acc*100, median_shot_acc*100, few_shot_acc *100
     res_name = args.load_path.split('/')[-2]
     print(res_name)
     print("top1 accuracy:", top1)
