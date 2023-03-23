@@ -167,5 +167,5 @@ if __name__ == "__main__":
         os.makedirs(args.output_dir)
 
     with open(output_file, 'a') as f:  # 将打开文件的模式设置为追加模式
-        output_str = f"{res_name}\t{top1:.2f}\t{many_shot_acc:.2f}\t{median_shot_acc:.2f}\t{few_shot_acc:.2f}{precision:.2f}\t{recall:.2f}\t{F1:.2f}\n"
+        output_str = f"{res_name}\t{top1:.2f}\t{many_shot_acc:.2f}\t{median_shot_acc:.2f}\t{few_shot_acc:.2f}\t{precision:.2f}\t{recall:.2f}\t{F1:.2f}\n"
         f.write(output_str)
