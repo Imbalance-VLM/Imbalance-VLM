@@ -10,6 +10,7 @@ import torch.distributed as dist
 from torch.utils.data import DataLoader
 from imblearn.datasets import name2sampler
 from imblearn.nets.utils import param_groups_layer_decay, param_groups_weight_decay
+import numpy as np
 
 def get_net_builder(net_name, from_name: bool):
     """
@@ -107,7 +108,7 @@ def get_data_loader(args,
     if num_iters is None:
         num_iters = args.num_train_iter
         
-
+    print(data_sampler)
     if data_sampler is None:
         return DataLoader(dset, batch_size=batch_size, shuffle=shuffle, collate_fn=None,
                           num_workers=num_workers, drop_last=drop_last, pin_memory=pin_memory)
@@ -126,11 +127,18 @@ def get_data_loader(args,
         per_epoch_steps = num_iters // num_epochs
 
         num_samples = per_epoch_steps * batch_size * num_replicas
-
-        return DataLoader(dset, batch_size=batch_size, shuffle=False, num_workers=num_workers, collate_fn=None,
+        if args.sample_type == 'cbs':
+            counts = np.bincount(dset.targets)
+            labels_weights = 1. / counts
+            weights = labels_weights[dset.targets]
+            return DataLoader(dset, batch_size=batch_size, shuffle=False, num_workers=num_workers, collate_fn=None,
+                          pin_memory=pin_memory, sampler=data_sampler(weights, dset, num_replicas=num_replicas, rank=rank, num_samples=num_samples),
+                          generator=generator, drop_last=drop_last)
+        else:
+            return DataLoader(dset, batch_size=batch_size, shuffle=False, num_workers=num_workers, collate_fn=None,
                           pin_memory=pin_memory, sampler=data_sampler(dset, num_replicas=num_replicas, rank=rank, num_samples=num_samples),
                           generator=generator, drop_last=drop_last)
-
+ 
     elif isinstance(data_sampler, torch.utils.data.Sampler):
         return DataLoader(dset, batch_size=batch_size, shuffle=False, num_workers=num_workers,
                           collate_fn=None, pin_memory=pin_memory, sampler=data_sampler,

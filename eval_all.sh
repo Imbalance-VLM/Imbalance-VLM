@@ -106,4 +106,3 @@ python eval.py --load_path /home/yzh/saved_models_backup/places_softmax_cbs_None
 python eval.py --load_path /home/yzh/saved_models_backup/places_softmax_None_None_0/model_best.pth
 python eval.py --load_path /home/yzh/saved_models_backup/places_softmax_None_None_1/model_best.pth
 python eval.py --load_path /home/yzh/saved_models_backup/places_softmax_None_None_2/model_best.pth
-python eval.py --load_path /home/yzh/saved_models_backup/wandb/model_best.pth

@@ -86,8 +86,7 @@ class WeightedDistributedSampler(DistributedSampler):
         self.sample_weights = self.get_sample_weights(weights)
     
     def get_sample_weights(self, weights):
-        targets = self.dataset.targets
-        sample_weight = torch.tensor([weights[t] for t in targets])
+        sample_weight = torch.tensor(weights)
         return sample_weight
 
     def __iter__(self):

@@ -6,6 +6,7 @@ from imblearn.core import AlgorithmBase
 from imblearn.core.utils import ALGORITHMS, count_parameters
 from imblearn.algorithms.supervised.utils import cbw_loss, focal_loss, balanced_softmax, grw_loss, lade_loss, ldam_loss, MARC_Net, Crt_Net, Lws_Net, DisAlign_Net
 import torch
+import numpy as np
 
 @ALGORITHMS.register('supervised')
 class Supervised(AlgorithmBase):
@@ -28,7 +29,7 @@ class Supervised(AlgorithmBase):
         self.freeze_backbone = args.freeze_backbone
         self.extra_fc = args.extra_fc
         self.args = args
-
+        #self.sampled_y = np.array([])
     def set_model(self):
         model = super().set_model()
         if 'stage1_path' in self.args:
@@ -62,6 +63,9 @@ class Supervised(AlgorithmBase):
     def train_step(self, x_lb, y_lb):
         # inference and calculate sup/unsup losses
         with self.amp_cm():
+            #self.sampled_y = np.concatenate((np.array(y_lb.cpu()).astype(int),self.sampled_y))
+            #print(self.sampled_y)
+            #print(np.bincount(self.sampled_y.astype(int)))
             if self.freeze_backbone:
                 if self.extra_fc != 'disalign':
                     with torch.no_grad(): 
