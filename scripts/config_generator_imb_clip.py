@@ -114,7 +114,7 @@ def create_classific_config(alg, seed,
     # other config
     cfg['overwrite'] = True
     cfg['amp'] = False
-    cfg['use_wandb'] = False
+    cfg['use_wandb'] = True
 
     cfg['decoder_depth'] = 3
     cfg['decoder_mlp_ratio'] = 0.5
