@@ -1,6 +1,7 @@
 data_statistics/
 data/
 saved_models/
+logs/
 pretrained_weights/
 ssl_nlp_datasets/
 back_translate_models/

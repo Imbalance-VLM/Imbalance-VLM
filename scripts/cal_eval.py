@@ -2,7 +2,7 @@
 import numpy as np
 
 # Read input file
-with open('../logs/final_res.txt', 'r') as f:
+with open('./logs/final_res.txt', 'r') as f:
     lines = f.readlines()
 
 # Initialize a dictionary to store the mean values for each algorithm
@@ -22,10 +22,10 @@ for line in lines:
         means[algorithm] += values
 
 # Calculate the mean values for each algorithm and store them in a new file
-with open('../logs/final_mean_res.txt', 'w') as f:
+with open('./logs/final_mean_res.txt', 'w') as f:
     for algorithm in means:
         means[algorithm] /= 3
-
+        means_str = ' '.join([f"{x:0.2f}" for x in means[algorithm]])
+        f.write(f"{algorithm} {means_str}\n")
         # Write the mean values to the output file
-        f.write(f"{algorithm} {' '.join(map(str, means[algorithm]))}\n")
 

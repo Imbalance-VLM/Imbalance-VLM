@@ -93,7 +93,10 @@ def create_classific_config(alg, seed,
     # data config
     cfg['data_dir'] = data_dir
     cfg['dataset'] = dataset
-    cfg['train_sampler'] = 'RandomSampler'
+    if cfg['sample_type'] == 'cbs':
+        cfg['train_sampler'] = 'WeightedRandomSampler'
+    else:
+        cfg['train_sampler'] = 'RandomSampler'
     cfg['num_classes'] = num_classes
     cfg['num_workers'] = 12
 
@@ -111,7 +114,7 @@ def create_classific_config(alg, seed,
     # other config
     cfg['overwrite'] = True
     cfg['amp'] = False
-    cfg['use_wandb'] = True
+    cfg['use_wandb'] = False
 
     cfg['decoder_depth'] = 3
     cfg['decoder_mlp_ratio'] = 0.5
