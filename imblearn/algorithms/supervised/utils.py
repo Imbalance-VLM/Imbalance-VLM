@@ -102,9 +102,9 @@ class Lws_Net(nn.Module):
         
     def forward(self, x, only_feat=False, only_fc=False):
         if only_feat is True:
-            return self.backbone(x,only_feat=True)
+            return self.backbone(x)['logits']
         if only_fc is True:
-            return self.scales * self.backbone(x,only_fc=True)
+            return self.scales * x
         else:
             return {'logits': self.scales * self.backbone(x)['logits']}
 
