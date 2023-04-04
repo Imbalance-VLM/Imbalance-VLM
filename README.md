@@ -42,3 +42,13 @@ You could also run all commands generated in `all_commands.txt` with https://git
 The logs of training can be found at [Internet Archive](https://archive.org/details/imbalance_lvm_logs_backup).
 All our experiment data (including debug runs) were uploaded to wandb, please refer to our wandb projects: [Imagenet_LT](https://wandb.ai/imbclip/imagenet_lt), [iNaturalist](https://wandb.ai/imbclip/inaturalist) and [Places](https://wandb.ai/imbclip/places).
 
+## Cite US
+```bibtex
+@article{wang2023exploring,
+  title={Exploring Vision-Language Models for Imbalanced Learning},
+  author={Wang, Yidong and Yu, Zhuohao and Wang, Jindong and Heng, Qiang and Chen, Hao and Ye, Wei and Xie, Rui and Xie, Xing and Zhang, Shikun},
+  journal={arXiv preprint},
+  year={2023}
+}
+```
+
