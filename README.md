@@ -11,7 +11,7 @@ The code is based on [USB](https://github.com/microsoft/Semi-supervised-learning
 + PyTorch 2.0
 + CUDA 11.8
 
-For reproduction, you can create our exact same environment with:
+To reproduce our results, you can create our exact same conda environment with:
 ```shell
 conda env create -f environment.yml
 ```
