@@ -1,5 +1,5 @@
 # Exploring Vision-Language Models for Imbalanced Learning
-Code and experiment logs for Exploring Vision-Language Models for Imbalanced Learning.
+Code and experimental logs for Exploring Vision-Language Models for Imbalanced Learning.
 ![main-figure](main-figure.png)
 
 
