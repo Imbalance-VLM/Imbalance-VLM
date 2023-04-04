@@ -136,25 +136,6 @@ def exp_imb_clip(config_file,imb_algs):
 
     datasets = [('imagenet_lt', '/home/yzh/ILSVRC/'), ('places', '/home/yzh/Places/places365_standard/'), ('inaturalist', '/home/yzh/iNaturalist/')]
 
-
-    # algs = ['flexmatch', 'fixmatch', 'uda', 'pseudolabel', 'fullysupervised', 'supervised', 'remixmatch', 'mixmatch', 'meanteacher',
-    #         'pimodel', 'vat', 'dash', 'crmatch', 'comatch', 'simmatch', 'adamatch', 'freematch', 'softmatch']
-    
-   # imb_algs = [
-   #     {'loss_type': 'softmax', 'sample_type': None, 'extra_fc': None},
-   #     {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': None},
-   #     {'loss_type': 'cbw_loss', 'sample_type': None, 'extra_fc': None},
-   #     {'loss_type': 'focal_loss', 'sample_type': None, 'extra_fc': None},
-   #     {'loss_type': 'balanced_softmax', 'sample_type': None, 'extra_fc': None},
-   #     {'loss_type': 'lade_loss', 'sample_type': None, 'extra_fc': None},
-   #     {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': None},
-   #     {'loss_type': 'ldam_loss', 'sample_type': None, 'extra_fc': None},
-   #     {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': 'crt'},
-   #     {'loss_type': 'softmax', 'sample_type': 'cbs', 'extra_fc': 'lws'},
-   #     {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': 'disalign'},
-   #     {'loss_type': 'grw_loss', 'sample_type': None, 'extra_fc': 'marc'},
-   # ]
-
     nets = [
         'openai_clip_vit_large_patch14'
     ]
