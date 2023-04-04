@@ -26,7 +26,7 @@ conda env create -f environment.yml
 
 Modify paths to your datasets at `scripts/config_generator_imb_clip.py` L237 and generate config files:
 ```shell
-cd Imbalance-VLM && mkdir logs
+cd Imbalance-VLM && mkdir logs && mkdir config
 python3 scripts/config_generator_imb_clip.py
 ```
 Then you can run experiments with commands like:
