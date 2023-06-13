@@ -1,6 +1,6 @@
 # Exploring Vision-Language Models for Imbalanced Learning
-Code and experimental logs for [Exploring Vision-Language Models for Imbalanced Learning](https://arxiv.org/abs/2304.01457).
-![main-figure](main-figure.png)
+Code and experimental logs for [Exploring Vision-Language Models for Imbalanced Learning](https://arxiv.org/abs/2304.01457) (accepted by International Journal of Computer Vision). 
+![main-figure](main-figure.png) 
 
 
 ## Requirements
@@ -47,7 +47,7 @@ All our experiment data (including debug runs) were uploaded to wandb, please re
 @article{wang2023exploring,
   title={Exploring Vision-Language Models for Imbalanced Learning},
   author={Wang, Yidong and Yu, Zhuohao and Wang, Jindong and Heng, Qiang and Chen, Hao and Ye, Wei and Xie, Rui and Xie, Xing and Zhang, Shikun},
-  journal={arXiv preprint},
+  journal={International Journal of Computer Vision},
   year={2023}
 }
 ```
